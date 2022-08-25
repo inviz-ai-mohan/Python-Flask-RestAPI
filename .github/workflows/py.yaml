@@ -1,37 +1,37 @@
+name: python application
 
-
-name: node ci
-
-on: 
+on:
   push: 
-    branches: [ master ]
+    branches: [ master]
   pull_request: 
-    branches: [ master ]
-    
-jobs:
-  build: 
-    runs-on: ubuntu-latest
-    
-    strategy:
-      matrix: 
-        node-version: [12.x]
+    branches: [ master ] 
 
-   
+
+jobs:
+  deploy:
+    name: build image
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7.9]
+
     steps:
-    - uses: actions/checkout@v2
-    - name: Use node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+    - name: checkout code
+      uses: actions/chechkout@v2
+
+    - name: setup python ${{ matrix.python.version }}
+      uses: actions/setup-python@v3
       with:
-        node-version: ${{ matrix.node-version }}
-     
-     
-    - uses: actions/checkout@v3
-    - uses: actions/setup-python@v4
-      with:
-        python-version: '3.10' 
-    
-    - name: npm install build nad test
+        python-version: ${{ matrix.python.version }}
+
+    - name: install dependies
       run: |
-        npm run build --if-present
-      env:
-       CI: true
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: install kubectl
+      uses: eks/setup-kubectl@v2.o
+      with:
+        version: '1.24.0'
+      id: install
+

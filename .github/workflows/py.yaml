@@ -30,7 +30,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: install kubectl
-      uses: eks/setup-kubectl@v2.o
+      uses: eks/setup-kubectl@v2.0
       with:
         version: '1.24.0'
       id: install

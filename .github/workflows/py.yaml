@@ -11,6 +11,9 @@ jobs:
   deploy:
     name: build image
     runs-on: ubuntu-latest
+    env:
+      GOPRIVATE: github.com/inviz-ai-mohan/privatemodule
+      GITHUB_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
     strategy:
       matrix:
         python-version: [3.7.9]
@@ -18,7 +21,8 @@ jobs:
     steps:
     - name: checkout code
       uses: actions/checkout@v2
-
+    - run: git config --global url.https://$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
+    
     - name: setup python ${{ matrix.python.version }}
       uses: actions/setup-python@v3
       with:
